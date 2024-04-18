@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model queue_service {
+  id                  Int          @id @default(autoincrement())
+  vn                  String
+  hn                  String
+  display_text        String?
+  oqueue              Int?
+  oqueue_text         String?
+  main_dep_queue      Int?
+  main_dep_queue_text String?
+  main_dep            String?
+  cur_dep             String?
+  department          String?
+  ptname              String?
+  confirm_all         String?
+  lab_count           Int?
+  report_count        Int?
+  read_status         String?
+  pttype_check        String?
+  vstdate             String?
+  cur_staff           String?
+  activeColor         Boolean?     @default(false)
+  status_call         statusQueue? @default(called)
+  createdAt           DateTime?    @default(now())
+  updatedAt           DateTime?    @updatedAt
+}
+
+enum statusQueue {
+  stay
+  called
+  failed
+  success
+}

@@ -3,7 +3,6 @@ import dbHos from "../../config/dbHos";
 import md5 from "md5";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import vine from "@vinejs/vine";
 import { prisma } from "../..";
 const secret: any = process.env.SECRET_KEY;
 const saltRounds = 10;

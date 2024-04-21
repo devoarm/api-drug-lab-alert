@@ -11,34 +11,46 @@ datasource db {
 }
 
 model queue_service {
-  id                  Int          @id @default(autoincrement())
-  vn                  String
-  hn                  String
-  display_text        String?
-  oqueue              Int?
-  oqueue_text         String?
-  main_dep_queue      Int?
-  main_dep_queue_text String?
-  main_dep            String?
-  cur_dep             String?
-  department          String?
-  ptname              String?
-  confirm_all         String?
-  lab_count           Int?
-  report_count        Int?
-  read_status         String?
-  pttype_check        String?
-  vstdate             String?
-  cur_staff           String?
-  activeColor         Boolean?     @default(false)
-  status_call         statusQueue? @default(called)
-  createdAt           DateTime?    @default(now())
-  updatedAt           DateTime?    @updatedAt
+  id             Int          @id @default(autoincrement())
+  hn             String
+  vn             String
+  display_text   String?
+  oqueue         Int
+  main_dep_queue Int?
+  cur_dep        String
+  main_dep       String
+  department     String?
+  vstdate        String
+  confirm_all    String?
+  lab_count      Int?
+  report_count   Int?
+  read_status    String?
+  pname          String
+  fname          String
+  lname          String
+  pttype_check   String?
+  cur_users_id   Int?
+  cur_user       users?       @relation(fields: [cur_users_id], references: [id])
+  activeColor    Boolean?     @default(false)
+  status_call    statusQueue? @default(wait)
+  createdAt      DateTime?    @default(now())
+  updatedAt      DateTime?    @updatedAt
+}
+
+model users {
+  id            Int             @id @default(autoincrement())
+  username      String
+  password      String
+  fullname      String
+  isActive      Boolean         @default(true)
+  createdAt     DateTime?       @default(now())
+  updatedAt     DateTime?       @updatedAt
+  queue_service queue_service[]
 }
 
 enum statusQueue {
+  wait
   stay
-  called
-  failed
+  calling
   success
 }

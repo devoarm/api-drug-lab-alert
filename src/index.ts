@@ -1,10 +1,12 @@
 import express, { Express, Request, Response } from "express";
 import http from "http";
+import cron from "node-cron";
+
 import v3Router from "./routes";
 import cors from "cors";
-import { hosQueueType } from "./types/queue/next-queue.type";
 import { PrismaClient, queue_service } from "@prisma/client";
 import dbHos from "./config/dbHos";
+import { InsertNewVn } from "./controller/node-cron/insert-new-vn.controller";
 
 const app = express();
 export const prisma = new PrismaClient();
@@ -50,3 +52,8 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
+
+cron.schedule("1,30 0-59 * * * *", async () => {
+  const res = await InsertNewVn()
+  console.log(res);
+});

@@ -6,6 +6,11 @@ dotenv.config();
 const dbHos: Knex = knex({
   client: "mysql",
   connection: {
+    // host: 'localhost',
+    // port: 3306,
+    // user: 'root',
+    // password: 'ntngarm',
+    // database: 'hos',
     host: process.env.hostHosXp,
     port: 3306,
     user: process.env.userHosXp,

@@ -35,10 +35,14 @@ export const CallQueue = async (req: Request, res: Response) => {
   }
 };
 export const SearchQueue = async (req: Request, res: Response) => {
-  let { slug } = req.query;
+  let slug = `%${req.query.slug}%`;
+
   try {
-    const query = await prisma.$queryRaw``;
-    return res.json({ status: 200, results: [] });
+    const query = await prisma.$queryRaw`SELECT * FROM queue_service qs
+    WHERE 
+      (qs.hn LIKE ${slug} OR CONCAT(qs.display_text,' ',qs.oqueue) LIKE ${slug} OR CONCAT(qs.pname,qs.fname,' ',qs.lname) LIKE ${slug})
+      AND qs.vstdate = ${moment().format("YYYY-MM-DD")}`;
+    return res.json({ status: 200, results: query });
   } catch (error: any) {
     return res.json({ status: 500, err: error.message });
   }
@@ -98,7 +102,7 @@ export const SetPassQueue = async (req: Request, res: Response) => {
   try {
     const update = await prisma.queue_service.update({
       where: { id: body.id },
-      data: { status_call: 'success' },
+      data: { status_call: "success" },
     });
     return res.json({ status: 200, results: update });
   } catch (error: any) {

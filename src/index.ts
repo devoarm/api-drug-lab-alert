@@ -41,7 +41,7 @@ async function main() {
     });
   });
 
-  server.listen(9889, () => console.log("server is running on port 8778"));
+  server.listen(9889, () => console.log("server is running on port 9889"));
 }
 main()
   .then(async () => {

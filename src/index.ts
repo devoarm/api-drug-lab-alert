@@ -6,14 +6,15 @@ import v3Router from "./routes";
 import cors from "cors";
 import { PrismaClient, queue_service } from "@prisma/client";
 import dbHos from "./config/dbHos";
-import { InsertNewVn } from "./controller/node-cron/insert-new-vn.controller";
+import { InsertNewVnAndUpdateDep } from "./controller/node-cron/insert-new-queue-main.controller";
+require("dotenv").config();
 
 const app = express();
 export const prisma = new PrismaClient();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: `http://localhost:3000`,
     methods: ["GET", "POST"],
   },
 });
@@ -33,7 +34,11 @@ async function main() {
     socket.on("disconnect", (msg: any) => {
       console.log("disconnect");
     });
+    socket.on("update list call", () => {
+      io.emit("update list call");
+    });
     socket.on("call queue", async (msg: queue_service) => {
+      console.log("call queue");
       io.emit("call queue", msg);
     });
     socket.on("stay queue", async (msg: queue_service) => {
@@ -41,7 +46,9 @@ async function main() {
     });
   });
 
-  server.listen(9889, () => console.log("server is running on port 9889"));
+  server.listen(process.env.PORT || 9889, () =>
+    console.log(`server is running on port : ${process.env.PORT}`)
+  );
 }
 main()
   .then(async () => {
@@ -54,6 +61,12 @@ main()
   });
 
 cron.schedule("1,30 0-59 * * * *", async () => {
-  const res = await InsertNewVn()
-  console.log(res);
+  try {
+    const query: any = await InsertNewVnAndUpdateDep();
+  } catch (error: any) {
+    console.log({
+      status: 500,
+      results: error.message,
+    });
+  }
 });

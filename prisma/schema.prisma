@@ -17,8 +17,8 @@ model queue_service {
   display_text   String?
   oqueue         Int
   main_dep_queue Int?
-  cur_dep        String
-  main_dep       String
+  cur_dep        String?
+  main_dep       String?
   department     String?
   vstdate        String
   confirm_all    String?
@@ -31,7 +31,7 @@ model queue_service {
   pttype_check   String?
   cur_users_id   Int?
   cur_user       users?       @relation(fields: [cur_users_id], references: [id])
-  activeColor    Boolean?     @default(false)
+  stay           Boolean?     @default(false)
   status_call    statusQueue? @default(wait)
   createdAt      DateTime?    @default(now())
   updatedAt      DateTime?    @updatedAt
@@ -46,6 +46,15 @@ model users {
   createdAt     DateTime?       @default(now())
   updatedAt     DateTime?       @updatedAt
   queue_service queue_service[]
+}
+
+model list_callname_department {
+  id        Int       @id @default(autoincrement())
+  name      String
+  depcode   String
+  isActive  Boolean   @default(true)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 enum statusQueue {

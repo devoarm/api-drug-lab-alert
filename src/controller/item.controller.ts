@@ -3,11 +3,10 @@ import moment from "moment";
 
 import fs from "fs";
 
-
 import dbHos from "../config/dbHos";
 import dotenv from "dotenv";
+import { prisma } from "..";
 dotenv.config();
-
 
 export const getLeader = async (req: Request, res: Response) => {
   try {
@@ -57,3 +56,4 @@ export const HosDoctor = async (req: Request, res: Response) => {
     return res.json({ status: 500, results: error.message });
   }
 };
+

@@ -1,8 +1,11 @@
 import express, { ErrorRequestHandler, Request, Response } from "express";
 
-
 import verifyToken from "../middleware/auth";
-import { HosSpclty, HosWard } from "../controller/item.controller";
+import {
+  
+  HosSpclty,
+  HosWard,
+} from "../controller/item.controller";
 
 const itemRoutes = express.Router();
 

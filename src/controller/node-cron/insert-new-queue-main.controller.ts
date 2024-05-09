@@ -136,23 +136,45 @@ export const UpdateDep = async (dataHos: HosQueue[]) => {
           return { ...hos, vstdate: moment(hos.vstdate).format("YYYY-MM-DD") };
         })
         .filter((item) => item != null);
-      if (findNewDep.length > 0) {
-        const createQueue = await prisma.queue_service.createMany({
-          data: [...findNewDep],
-        });
-        console.log("update new dep");
-      }
+      if (findService.length > 0) {
+        new Promise((resolve) => {
+          var numCount = 0;
+          dataHos?.forEach(async (item: any) => {
+            const findFirst = await prisma.queue_service.findFirst({
+              where: {
+                vn: item.vn,
+                cur_dep: item.cur_dep,
+                vstdate: moment().format("YYYY-MM-DD"),
+              },
+            });
+            if (!findFirst) {
+              const createQueue = await prisma.queue_service.create({
+                data: {
+                  ...item,
+                  vstdate: moment(item.vstdate).format("YYYY-MM-DD"),
+                },
+              });
 
+              numCount++;
+            }
+          });
+          return {
+            status: 200,
+            results: numCount,
+            service_name: "update new dep",
+          };
+        });
+      }
       return {
-        status: 200,
-        results: findNewDep.length,
-        service_name: "update new dep",
+        status: 301,
+        results: 0,
+        service_name: "insert new dep",
       };
     } else {
       return {
         status: 301,
         results: 0,
-        service_name: "insert new vn",
+        service_name: "insert new dep",
       };
     }
   } catch (error: any) {

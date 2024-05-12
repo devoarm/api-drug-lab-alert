@@ -70,3 +70,20 @@ cron.schedule("1,30 0-59 * * * *", async () => {
     });
   }
 });
+cron.schedule("0 0 1,5 * * *", async () => {
+  try {
+    const query: any = await dbHos.raw(`UPDATE hos.oapp o
+    JOIN genius.clinic_map_depcode cmd ON cmd.clinic = o.clinic
+    SET 
+      o.depcode = cmd.depcode
+    WHERE
+      cmd.clinic IS NOT NULL AND
+      o.nextdate = DATE(NOW())`);
+    console.log("update depcode oapp");
+  } catch (error: any) {
+    console.log({
+      status: 500,
+      results: error.message,
+    });
+  }
+});

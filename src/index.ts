@@ -1,16 +1,11 @@
 import express, { Express, Request, Response } from "express";
 import http from "http";
 import cron from "node-cron";
-
-
 import cors from "cors";
-import { PrismaClient, queue_service } from "@prisma/client";
 import dbHos from "./config/dbHos";
 import v1Router from "./routes";
 require("dotenv").config();
-
 const app = express();
-export const prisma = new PrismaClient();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {

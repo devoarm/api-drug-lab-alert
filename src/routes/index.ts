@@ -1,10 +1,5 @@
 import express from "express";
 
-import {
-  InsertNewVn,
-  InsertNewVnAndUpdateDep,
-  UpdateDep,
-} from "../controller/node-cron/insert-new-queue-main.controller";
 import drugRouter from "./drug/index.routes";
 
 const v1Router = express.Router();

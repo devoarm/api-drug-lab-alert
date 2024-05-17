@@ -6,7 +6,6 @@ import cron from "node-cron";
 import cors from "cors";
 import { PrismaClient, queue_service } from "@prisma/client";
 import dbHos from "./config/dbHos";
-import { InsertNewVnAndUpdateDep } from "./controller/node-cron/insert-new-queue-main.controller";
 import v1Router from "./routes";
 require("dotenv").config();
 
